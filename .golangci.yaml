@@ -1,0 +1,25 @@
+version: "2"
+
+linters:
+  # choose one: standard | fast | all | none
+  default: standard
+  enable:
+    - govet
+    - staticcheck
+    - ineffassign
+    - unused
+    - revive
+  disable:
+    - errcheck
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+
+issues:
+  max-same-issues: 3
+
+run:
+  # no default timeout in v2; add one only if you want via CLI
+  tests: true
