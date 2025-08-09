@@ -17,12 +17,10 @@ import (
 )
 
 var (
-	addDate     string
-	addText     string
-	addFile     string
-	addEdit     bool
-	addTags     []string
-	addProjects []string
+	addDate string
+	addText string
+	addFile string
+	addEdit bool
 )
 
 var addCmd = &cobra.Command{
@@ -77,21 +75,7 @@ var addCmd = &cobra.Command{
 		}
 		defer database.Close()
 
-		// build tag/project models
-		tags := make([]rmodel.Tag, 0, len(addTags))
-		for _, t := range addTags {
-			if strings.TrimSpace(t) != "" {
-				tags = append(tags, rmodel.Tag{Name: strings.TrimSpace(t)})
-			}
-		}
-		projects := make([]rmodel.Project, 0, len(addProjects))
-		for _, p := range addProjects {
-			if strings.TrimSpace(p) != "" {
-				projects = append(projects, rmodel.Project{Name: strings.TrimSpace(p)})
-			}
-		}
-
-		s := rmodel.Summary{Date: when, Text: addText, Tags: tags, Projects: projects}
+		s := rmodel.Summary{Date: when, Text: addText}
 		if err := database.UpsertSummary(&s); err != nil {
 			return err
 		}
@@ -106,8 +90,6 @@ func init() {
 	addCmd.Flags().StringVar(&addText, "text", "", "Summary text (if empty, reads stdin or opens $EDITOR)")
 	addCmd.Flags().StringVar(&addFile, "file", "", "Read summary text from file")
 	addCmd.Flags().BoolVar(&addEdit, "edit", false, "Open $EDITOR to write the summary")
-	addCmd.Flags().StringSliceVar(&addTags, "tag", nil, "Tag(s) for this entry; repeat or comma-separated")
-	addCmd.Flags().StringSliceVar(&addProjects, "project", nil, "Project name(s) for this entry; repeat or comma-separated")
 }
 
 func openInEditor() (string, error) {
@@ -115,17 +97,17 @@ func openInEditor() (string, error) {
 	if ed == "" {
 		ed = "vi"
 	}
-	tf, err := os.CreateTemp("", "reporter-*.md")
+	tf, err := os.CreateTemp("", "reporter-*.txt")
 	if err != nil {
 		return "", err
 	}
 	defer os.Remove(tf.Name())
 
-	cmd := exec.Command(ed, tf.Name())
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	if rErr := cmd.Run(); rErr != nil {
+	c := exec.Command(ed, tf.Name())
+	c.Stdin = os.Stdin
+	c.Stdout = os.Stdout
+	c.Stderr = os.Stderr
+	if rErr := c.Run(); rErr != nil {
 		return "", rErr
 	}
 
