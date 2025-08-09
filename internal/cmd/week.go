@@ -14,11 +14,9 @@ import (
 )
 
 var (
-	weekISO    string
-	fromDate   string
-	toDate     string
-	format     string
-	perProject bool
+	weekISO  string
+	fromDate string
+	toDate   string
 )
 
 var weekCmd = &cobra.Command{
@@ -64,12 +62,7 @@ var weekCmd = &cobra.Command{
 			return nil
 		}
 
-		var prompt string
-		if perProject {
-			prompt = summarize.WeeklyPromptByProject(entries, start, end)
-		} else {
-			prompt = summarize.WeeklyPrompt(entries, start, end)
-		}
+		prompt := summarize.WeeklyPrompt(entries, start, end)
 
 		client := ollama.NewClient(ollamaHost)
 		resp, err := client.Generate(cmd.Context(), model, prompt)
@@ -77,10 +70,6 @@ var weekCmd = &cobra.Command{
 			return err
 		}
 
-		if strings.ToLower(format) == "markdown" {
-			fmt.Println(resp)
-			return nil
-		}
 		// Plain text fallback
 		fmt.Println(strings.TrimSpace(resp))
 		return nil
@@ -92,6 +81,4 @@ func init() {
 	weekCmd.Flags().StringVar(&weekISO, "week", "", "ISO week like 2025-W32")
 	weekCmd.Flags().StringVar(&fromDate, "from", "", "Start date YYYY-MM-DD")
 	weekCmd.Flags().StringVar(&toDate, "to", "", "End date YYYY-MM-DD")
-	weekCmd.Flags().StringVar(&format, "format", "markdown", "Output format: markdown|text")
-	weekCmd.Flags().BoolVar(&perProject, "per-project", true, "Group entries and summarize per project when possible")
 }

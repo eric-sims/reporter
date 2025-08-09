@@ -29,7 +29,7 @@ func Open() (*DB, error) {
 	if gErr != nil {
 		return nil, gErr
 	}
-	if miErr := g.AutoMigrate(&model.Tag{}, &model.Project{}, &model.Summary{}); miErr != nil {
+	if miErr := g.AutoMigrate(&model.Summary{}); miErr != nil {
 		return nil, miErr
 	}
 	return &DB{g: g}, nil
@@ -51,30 +51,13 @@ func (d *DB) UpsertSummary(s *model.Summary) error {
 	if s.Date.IsZero() {
 		return errors.New("summary date required")
 	}
-	var existing model.Summary
-	res := d.g.Preload("Tags").Preload("Projects").Where("date = ?", s.Date.Truncate(24*time.Hour)).First(&existing)
-	if res.Error == nil {
-		existing.Text = s.Text
-		if err := d.g.Save(&existing).Error; err != nil {
-			return err
-		}
-		if err := d.g.Model(&existing).Association("Tags").Replace(s.Tags); err != nil {
-			return err
-		}
-		if err := d.g.Model(&existing).Association("Projects").Replace(s.Projects); err != nil {
-			return err
-		}
-		return nil
-	}
-	if errors.Is(res.Error, gorm.ErrRecordNotFound) {
-		return d.g.Create(s).Error
-	}
-	return res.Error
+	// Always create a new summary entry (allow multiple entries per day).
+	return d.g.Create(s).Error
 }
 
 // ListSummaries - Lists summaries
 func (d *DB) ListSummaries(start, end time.Time) ([]model.Summary, error) {
 	var out []model.Summary
-	q := d.g.Preload("Tags").Preload("Projects").Order("date asc").Where("date BETWEEN ? AND ?", start.Truncate(24*time.Hour), end)
+	q := d.g.Order("date asc, id asc").Where("date BETWEEN ? AND ?", start.Truncate(24*time.Hour), end)
 	return out, q.Find(&out).Error
 }
