@@ -1,4 +1,4 @@
-// Package cmd - lists entries for the day
+// Package cmd - lists entries for the day [default: today}
 package cmd
 
 import (
@@ -12,12 +12,29 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var (
+	listDate string
+)
+
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "list reports for the day",
+	Short: "List reports for a given day",
+	Long:  "List reports for a given day (local time). Use --date YYYY-MM-DD to choose a day; defaults to today.",
 	RunE: func(_ *cobra.Command, _ []string) error {
-		start := now.BeginningOfDay()
-		end := now.EndOfDay()
+		var start, end time.Time
+		if listDate == "" {
+			// Today in local time
+			start = now.BeginningOfDay()
+			end = now.EndOfDay()
+		} else {
+			d, err := time.Parse(time.DateOnly, listDate)
+			if err != nil {
+				return fmt.Errorf("invalid --date %q: %w", listDate, err)
+			}
+			// Treat the parsed date in local time
+			start = time.Date(d.Year(), d.Month(), d.Day(), 0, 0, 0, 0, time.Local)
+			end = start.Add(24*time.Hour - time.Nanosecond)
+		}
 		database, err := db.Open()
 		if err != nil {
 			return err
@@ -54,4 +71,5 @@ var listCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(listCmd)
+	listCmd.Flags().StringVarP(&listDate, "date", "d", "", "Date to list (YYYY-MM-DD); defaults to today")
 }
