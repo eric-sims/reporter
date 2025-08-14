@@ -79,14 +79,14 @@ var addCmd = &cobra.Command{
 		if err := database.UpsertSummary(&s); err != nil {
 			return err
 		}
-		fmt.Printf("Saved summary for %s (id=%d)\n", when.Format("2006-01-02"), s.ID)
+		fmt.Printf("Saved summary for %s (id=%d)\n", when.Format(time.DateOnly), s.ID)
 		return nil
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	addCmd.Flags().StringVar(&addDate, "date", time.Now().Format("2006-01-02"), "Date for the summary (YYYY-MM-DD)")
+	addCmd.Flags().StringVarP(&addDate, "date", "d", time.Now().Format(time.DateOnly), "Date for the summary (YYYY-MM-DD)")
 	addCmd.Flags().StringVar(&addText, "text", "", "Summary text (if empty, reads stdin or opens $EDITOR)")
 	addCmd.Flags().StringVar(&addFile, "file", "", "Read summary text from file")
 	addCmd.Flags().BoolVar(&addEdit, "edit", false, "Open $EDITOR to write the summary")

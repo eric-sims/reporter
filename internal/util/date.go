@@ -16,7 +16,7 @@ func ParseDateOrToday(s string) (time.Time, error) {
 
 // ParseDate - in regular date format
 func ParseDate(s string) (time.Time, error) {
-	t, err := time.Parse("2006-01-02", s)
+	t, err := time.Parse(time.DateOnly, s)
 	if err != nil {
 		return time.Time{}, fmt.Errorf("invalid date %q (want YYYY-MM-DD)", s)
 	}
