@@ -1,6 +1,6 @@
 # reporter
 
-A Go CLI to capture daily summaries and generate weekly summaries, grouped by project, using a locally running Ollama LLM.
+A CLI tool to capture daily summaries and generate weekly summaries, using a locally running Ollama LLM. Written in Golang.
 
 ## Features
 - `reporter add` save a summary for today or a specific date (from flag, stdin, or $EDITOR)
@@ -27,3 +27,4 @@ Set these environment variables (or flags):
 
 ## Upcoming features
 - [ ] Ability to connect to ChatGPT API
+- [ ] Ability to tag projects to entries
