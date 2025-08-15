@@ -1,4 +1,4 @@
-# reporter — daily summaries CLI
+# reporter
 
 A Go CLI to capture daily summaries and generate weekly summaries, grouped by project, using a locally running Ollama LLM.
 
