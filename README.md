@@ -8,3 +8,12 @@ A Go CLI to capture daily summaries and generate weekly summaries, grouped by pr
 - `reporter list` lists reports for a given day (default today)
 - SQLite storage via GORM (DB file: ~/.config/reporter/data.db)
 - Configurable Ollama host and model
+
+## Installation
+TODO
+
+## Connect Ollama
+TODO
+
+## Upcoming features
+- [ ] Ability to connect to ChatGPT API
