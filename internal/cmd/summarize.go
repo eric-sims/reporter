@@ -20,9 +20,9 @@ var (
 )
 
 var weekCmd = &cobra.Command{
-	Use:   "week",
+	Use:   "summarize",
 	Short: "Summarize a week's entries with Ollama",
-	Long:  "Collect summaries in a week range and generate an LLM-powered recap using a local Ollama server.",
+	Long:  "Collect summaries in a week range and generate an LLM-powered recap using a local Ollama server. Default's to current week.",
 	RunE: func(cmd *cobra.Command, _ []string) error {
 		var start, end time.Time
 		var err error
