@@ -7,3 +7,12 @@ A Go CLI to capture daily summaries and generate weekly summaries, grouped by pr
 - `reporter week` aggregate a given week (or current week) and ask Ollama to summarize
 - SQLite storage via GORM (DB file: ~/.config/reporter/data.db)
 - Configurable Ollama host and model
+
+## Installation
+TODO
+
+## Connect Ollama
+TODO
+
+## Upcoming features
+- [ ] Ability to connect to ChatGPT API
