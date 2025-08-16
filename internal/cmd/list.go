@@ -14,6 +14,7 @@ import (
 
 var (
 	listDate string
+	listWeek bool
 )
 
 var listCmd = &cobra.Command{
@@ -35,6 +36,12 @@ var listCmd = &cobra.Command{
 			start = time.Date(d.Year(), d.Month(), d.Day(), 0, 0, 0, 0, time.Local)
 			end = start.Add(24*time.Hour - time.Nanosecond)
 		}
+
+		if listWeek {
+			start = now.BeginningOfWeek()
+			end = now.EndOfWeek()
+		}
+
 		database, err := db.Open()
 		if err != nil {
 			return err
@@ -72,4 +79,5 @@ var listCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(listCmd)
 	listCmd.Flags().StringVarP(&listDate, "date", "d", "", "Date to list (YYYY-MM-DD); defaults to today")
+	listCmd.Flags().BoolVarP(&listWeek, "week", "w", false, "List all week reports")
 }
