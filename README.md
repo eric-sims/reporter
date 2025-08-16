@@ -3,13 +3,13 @@
 A CLI tool to capture daily summaries and generate weekly summaries, using a locally running Ollama LLM. Written in Golang.
 
 ## Features
-- `reporter add` save a summary for today or a specific date (from flag, stdin, or $EDITOR)
-- `reporter summarize` aggregate a given week (or current week) and ask Ollama to summarize
-- `reporter list` lists reports for a given day (default today)
+- Save a summary for today or a specific date
+- Aggregate a given week (or current week) and ask a large language model to summarize
+- List reports for a given day or week
 - `reporter help` for a usage instructions.
 - CLI logic handled by [CobraCLI](https://github.com/spf13/cobra)
 - [SQLite](https://github.com/glebarez/sqlite) storage interfaced with [GORM](https://github.com/go-gorm/gorm) (DB file: `~/.config/reporter/data.db`)
-- Configurable LLM models
+- Configurable LLM models for Ollama, ability to access OpenAI API
 
 ## Installation
 Installation is available through `go install`:
@@ -17,14 +17,21 @@ Installation is available through `go install`:
 go install github.com/eric-sims/reporter@latest
 ```
 
-## Connect Ollama
+## Connect to Ollama
 [Instructions](https://github.com/ollama/ollama/blob/main/README.md#quickstart) for installing Ollama, finding models and serving it locally.
 
 Set these environment variables (or flags):
 
-`OLLAMA_HOST  (flag -ollama)` \
-`OLLAMA_MODEL (flag -model)`
+`OLLAMA_HOST  or flag --ollama` \
+`OLLAMA_MODEL or flag --model`
+
+## Connect to OpenAI API
+Generate an api key [here](https://platform.openai.com/settings/organization/api-keys).
+Then save it to the environment variable: \
+
+`OPENAI_API_KEY or flag --openai-api-key`
 
 ## Upcoming features
-- [ ] Ability to connect to ChatGPT API
-- [ ] Ability to tag projects to entries
+- [x] Connect to ChatGPT API (user-provided api key)
+- [ ] Tag projects to entries
+- [ ] Easily add git-hooks to repositories to log commits

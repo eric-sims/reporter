@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 )
@@ -10,6 +11,8 @@ import (
 var (
 	ollamaHost string
 	model      string
+	useOpenAI  bool
+	openAIKey  string
 )
 
 var rootCmd = &cobra.Command{
@@ -27,13 +30,22 @@ func Execute() {
 }
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&ollamaHost, "ollama", envOr("OLLAMA_HOST", "http://127.0.0.1:11434"), "Ollama host, e.g. http://127.0.0.1:11434")
-	rootCmd.PersistentFlags().StringVar(&model, "model", envOr("OLLAMA_MODEL", "gpt-oss:20b"), "Ollama model to use for summarization")
+	rootCmd.PersistentFlags().StringVar(&ollamaHost, "ollama", envOr("OLLAMA_HOST", "http://127.0.0.1:11434"), "Ollama host, e.g. http://127.0.0.1:11434 (also env OLLAMA_HOST)")
+	rootCmd.PersistentFlags().StringVar(&model, "model", envOr("OLLAMA_MODEL", "gpt-oss:20b"), "Ollama model to use for summarization (also env OLLAMA_MODEL)")
+	rootCmd.PersistentFlags().BoolVar(&useOpenAI, "use-openai", envOrBool("USE_OPENAI", false), "Use OpenAI instead of Ollama")
+	rootCmd.PersistentFlags().StringVar(&openAIKey, "openai-api-key", envOr("OPENAI_API_KEY", ""), "OpenAI API Key")
 }
 
 func envOr(key, def string) string {
 	if v := os.Getenv(key); v != "" {
 		return v
+	}
+	return def
+}
+
+func envOrBool(key string, def bool) bool {
+	if v := os.Getenv(key); v != "" {
+		return strings.ToLower(v) == "true" || v == "1"
 	}
 	return def
 }
