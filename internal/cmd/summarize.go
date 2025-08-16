@@ -8,6 +8,7 @@ import (
 
 	"github.com/eric-sims/reporter/internal/db"
 	"github.com/eric-sims/reporter/internal/ollama"
+	"github.com/eric-sims/reporter/internal/openai"
 	"github.com/eric-sims/reporter/internal/summarize"
 	"github.com/eric-sims/reporter/internal/util"
 	"github.com/spf13/cobra"
@@ -64,14 +65,20 @@ var weekCmd = &cobra.Command{
 
 		prompt := summarize.WeeklyPrompt(entries, start, end)
 
-		client := ollama.NewClient(ollamaHost)
-		resp, err := client.Generate(cmd.Context(), model, prompt)
-		if err != nil {
-			return err
+		var resp string
+		var errAPI error
+		if useOpenAI {
+			client := openai.NewClient(openAIKey)
+			resp, errAPI = client.Generate(cmd.Context(), prompt)
+		} else {
+			client := ollama.NewClient(ollamaHost)
+			resp, errAPI = client.Generate(cmd.Context(), model, prompt)
 		}
-
-		// Plain text fallback
+		if errAPI != nil {
+			return errAPI
+		}
 		fmt.Println(strings.TrimSpace(resp))
+
 		return nil
 	},
 }
