@@ -27,7 +27,7 @@ Set these environment variables (or flags):
 
 ## Connect to OpenAI API
 > [!NOTE]  
-> This is different than the comsumer ChatGPT subscription. This is a separate dev account separate pricing structures. Learn more about it [here](https://platform.openai.com/docs/overview).
+> This is different than the consumer ChatGPT subscription. This is a separate dev account separate pricing structures. Learn more about it [here](https://platform.openai.com/docs/overview).
 
 Generate an api key [here](https://platform.openai.com/settings/organization/api-keys), then save it to the environment variable: 
 
