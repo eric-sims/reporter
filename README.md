@@ -26,8 +26,10 @@ Set these environment variables (or flags):
 `OLLAMA_MODEL or flag --model`
 
 ## Connect to OpenAI API
-Generate an api key [here](https://platform.openai.com/settings/organization/api-keys).
-Then save it to the environment variable: \
+> [!NOTE]  
+> This is different than the comsumer ChatGPT subscription. This is a separate dev account separate pricing structures. Learn more about it [here](https://platform.openai.com/docs/overview).
+
+Generate an api key [here](https://platform.openai.com/settings/organization/api-keys), then save it to the environment variable: 
 
 `OPENAI_API_KEY or flag --openai-api-key`
 
