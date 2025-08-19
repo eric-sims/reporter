@@ -35,5 +35,6 @@ Generate an api key [here](https://platform.openai.com/settings/organization/api
 
 ## Upcoming features
 - [x] Connect to ChatGPT API (user-provided api key)
+- [ ] Dump prompt to stdout so a user can copy/paste to any model.
 - [ ] Tag projects to entries
 - [ ] Easily add git-hooks to repositories to log commits
