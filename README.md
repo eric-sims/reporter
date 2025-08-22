@@ -22,8 +22,8 @@ go install github.com/eric-sims/reporter@latest
 
 Set these environment variables (or flags):
 
-`OLLAMA_HOST  or flag --ollama` \
-`OLLAMA_MODEL or flag --model`
+`OLLAMA_HOST  or flag --ollama (default: http://127.0.0.1:11434)` \
+`OLLAMA_MODEL or flag --model  (default: gpt-oss:20b)`
 
 ## Connect to OpenAI API
 > [!NOTE]  
